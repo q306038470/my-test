@@ -13,9 +13,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    #app {
-        font-size: 50px;
-    }
-</style>
