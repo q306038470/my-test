@@ -1,6 +1,6 @@
 <template>
-    <div id="wrap">
-        {{initdata}}
+    <div id="app">
+        <!-- {{initdata}} -->
     </div>
 </template>
 
@@ -14,8 +14,8 @@ export default {
 }
 </script>
 
-<style>
-    #wrap {
+<style scoped>
+    #app {
         font-size: 50px;
     }
 </style>
