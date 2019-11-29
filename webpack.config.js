@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const ExtractPlugin = require('extract-text-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === "development"
 
@@ -25,6 +26,10 @@ const config = {
           test: /\.jsx$/,
           loader: 'babel-loader'
         },
+        // {
+        //   test: /\.css$/,
+        //   loader: ExtractPlugin.extract("style-loader","css-loader")
+        // },
         {
           test: /\.(gif|jpg|jpeg|png|svg)$/,
           use: [
@@ -42,7 +47,23 @@ const config = {
     plugins: [
       new VueLoaderPlugin(),
       new CleanWebpackPlugin(),
-      new HTMLWebpackPlugin(),
+      new HTMLWebpackPlugin({
+        inject: true,
+            template: path.join(__dirname, 'dist/index.html'),
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true
+            }
+      }),
+      new OptimizeCssAssetsPlugin(),
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: isDev ? '"development"' : '"production"'
@@ -53,7 +74,7 @@ const config = {
 
 if (isDev) {
   config.module.rules.push({
-    test:/\.styl$/,
+    test:/\.css$/,
     use: [
       'style-loader',
       'css-loader',
@@ -63,7 +84,7 @@ if (isDev) {
           sourceMap: true
         }
       },
-      'stylus-loader'    
+      // 'stylus-loader'    
     ]
   })
   config.devtool = '#cheap-module-eval-source-map'
@@ -83,7 +104,7 @@ if (isDev) {
 }else {
   config.output.filename = '[name].[chunkhash:8].js'
   config.module.rules.push({
-    test:/\.styl$/,
+    test:/\.css$/,
     use: ExtractPlugin.extract({
       fallback: 'style-loader',
       use: [
@@ -94,7 +115,7 @@ if (isDev) {
             sourceMap: true
           }
         },
-        'stylus-loader'    
+        // 'stylus-loader'    
       ]
     })
   })

@@ -15,4 +15,9 @@ export default {
 </script>
 
 
+<style lang="css">
+    body {
+        color: red;
+    }
+</style>
 
