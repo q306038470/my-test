@@ -1,8 +1,9 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const ExtractPlugin = require('extract-text-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const ExtractPlugin = require('extract-text-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === "development"
 
@@ -40,6 +41,7 @@ const config = {
     },
     plugins: [
       new VueLoaderPlugin(),
+      new CleanWebpackPlugin(),
       new HTMLWebpackPlugin(),
       new webpack.DefinePlugin({
         'process.env': {
