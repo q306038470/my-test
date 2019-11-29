@@ -26,10 +26,22 @@ const config = {
           test: /\.jsx$/,
           loader: 'babel-loader'
         },
-        // {
-        //   test: /\.css$/,
-        //   loader: ExtractPlugin.extract("style-loader","css-loader")
-        // },
+        {
+          test:/\.css$/,
+          use: ExtractPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+              'css-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: true
+                }
+              },
+              'stylus-loader'    
+            ]
+          })
+        },
         {
           test: /\.(gif|jpg|jpeg|png|svg)$/,
           use: [
@@ -74,7 +86,7 @@ const config = {
 
 if (isDev) {
   config.module.rules.push({
-    test:/\.css$/,
+    test:/\.styl$/,
     use: [
       'style-loader',
       'css-loader',
@@ -84,7 +96,7 @@ if (isDev) {
           sourceMap: true
         }
       },
-      // 'stylus-loader'    
+      'stylus-loader'    
     ]
   })
   config.devtool = '#cheap-module-eval-source-map'
@@ -104,7 +116,7 @@ if (isDev) {
 }else {
   config.output.filename = '[name].[chunkhash:8].js'
   config.module.rules.push({
-    test:/\.css$/,
+    test:/\.styl$/,
     use: ExtractPlugin.extract({
       fallback: 'style-loader',
       use: [
@@ -115,12 +127,12 @@ if (isDev) {
             sourceMap: true
           }
         },
-        // 'stylus-loader'    
+        'stylus-loader'    
       ]
     })
   })
   config.plugins.push(
-    new ExtractPlugin('styles.[md5:contenthash:hex:8].css')
+    new ExtractPlugin('css/styles.[md5:contenthash:hex:8].css')
   )
 }
 
